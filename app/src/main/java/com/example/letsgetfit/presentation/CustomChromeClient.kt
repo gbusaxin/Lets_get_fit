@@ -1,9 +1,11 @@
 package com.example.letsgetfit.presentation
 
+import android.R
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Environment
 import android.os.Parcelable
 import android.provider.MediaStore
@@ -11,7 +13,7 @@ import android.util.Log
 import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
 import android.webkit.WebView
-import androidx.lifecycle.LiveData
+import androidx.appcompat.app.AppCompatActivity
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -49,7 +51,7 @@ class CustomChromeClient(private val context: Activity) : WebChromeClient() {
             var photoFile: File? = null
             try {
                 photoFile = createImageFile()
-                takePicIntent.putExtra("PhotoFile", mCameraPhotoPath)
+                takePicIntent.putExtra("PhotoFile", _mCameraPhotoPath)
             } catch (e: IOException) {
                 Log.e("CHECK_WEB_FRAGMENT", "CANNOT TO CREATE AN IMAGE FILE CHROME CLIENT", e)
             }
@@ -102,7 +104,7 @@ class CustomChromeClient(private val context: Activity) : WebChromeClient() {
         val captureIntent = Intent(
             MediaStore.ACTION_IMAGE_CAPTURE
         )
-        captureIntent.putExtra(MediaStore.EXTRA_OUTPUT, mCapturedImageURI)
+        captureIntent.putExtra(MediaStore.EXTRA_OUTPUT, _mCapturedImageURI)
         val i = Intent(Intent.ACTION_GET_CONTENT)
         i.addCategory(Intent.CATEGORY_OPENABLE)
         i.type = "image/*"
@@ -133,17 +135,67 @@ class CustomChromeClient(private val context: Activity) : WebChromeClient() {
         openFileChooser(uploadMsg, acceptType!!)
     }
 
+    fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (requestCode != INPUT_FILE_REQUEST_CODE || _mFilePathCallback == null) {
+                context.startActivityForResult(data, requestCode)
+                return
+            }
+            var results: Array<Uri>? = null
+            // Check that the response is a good one
+            if (resultCode == AppCompatActivity.RESULT_OK) {
+                if (R.attr.data == null) {
+                    // If there is not data, then we may have taken a photo
+                    if (_mCameraPhotoPath != null) {
+                        results = arrayOf(Uri.parse(_mCameraPhotoPath))
+                    }
+                } else {
+                    val dataString: String? = data?.getDataString()
+                    if (dataString != null) {
+                        results = arrayOf(Uri.parse(dataString))
+                    }
+                }
+            }
+            _mFilePathCallback?.onReceiveValue(results)
+            _mFilePathCallback = null
+        } else if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
+            if (requestCode != FILECHOOSER_RESULTCODE || _mUploadMessage == null) {
+                context.startActivityForResult(data, requestCode)
+                return
+            }
+            if (requestCode == FILECHOOSER_RESULTCODE) {
+                if (null == _mUploadMessage) {
+                    return
+                }
+                var result: Uri? = null
+                try {
+                    if (resultCode != AppCompatActivity.RESULT_OK) {
+                        result = null
+                    } else {
+                        // retrieve from the private variable if the intent is null
+                        result = data?.let { _mCapturedImageURI ?: it.data }
+                    }
+                } catch (e: Exception) {
+                    Log.e("APP_ERROR", "CHROME CLIENT!!", e)
+                }
+                _mUploadMessage?.onReceiveValue(result)
+                _mUploadMessage = null
+            }
+        }
+        return
+    }
+
     @SuppressLint("SimpleDateFormat")
     fun createImageFile(): File? {
-        val timeStamp:String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
         val imageFileName = "JPEG_${timeStamp}_"
-        val storageDir:File = Environment.getExternalStoragePublicDirectory(
+        val storageDir: File = Environment.getExternalStoragePublicDirectory(
             Environment.DIRECTORY_PICTURES
         )
         return File.createTempFile(
-                imageFileName,  /* prefix */
-        ".jpg",  /* suffix */
-        storageDir /* directory */
+            imageFileName,  /* prefix */
+            ".jpg",  /* suffix */
+            storageDir /* directory */
         )
     }
 }

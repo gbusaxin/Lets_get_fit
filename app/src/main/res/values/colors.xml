@@ -21,5 +21,7 @@
     <color name="transparent_25">#40000000</color>
     <color name="transparent_75">#BF000000</color>
     <color name="full_transparent">#00000000</color>
+    <color name="transparent_orange">#40FFA000</color>
+    <color name="transparent_blue">#40717BE6</color>
 
 </resources>

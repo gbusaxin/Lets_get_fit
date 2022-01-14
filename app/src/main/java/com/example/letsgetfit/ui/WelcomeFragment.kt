@@ -4,8 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.letsgetfit.R
@@ -29,20 +28,21 @@ class WelcomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.apply {
-            if (editTextNameWelcome.text.toString() != "" &&
-                editTextSurnameWelcome.text.toString() != ""
-            ) {
-                buttonReadyWelcome.setOnClickListener {
-                    onEnterClickListener()
-                }
+        val button = binding.buttonReadyWelcome
+        val name = binding.editTextNameWelcome.text.toString()
+        val surname = binding.editTextSurnameWelcome.text.toString()
+
+        button.setOnClickListener {
+            if (!name.equals("") && !surname.equals("")) {
+                findNavController().navigate(R.id.action_welcomeFragment_to_chooseFragment)
+            } else {
+                Toast.makeText(
+                    requireContext(),
+                    "Поля \"Имя\" и \"Фамилия\" должны быть заполнены!", Toast.LENGTH_SHORT
+                ).show()
             }
         }
 
-    }
-
-    fun onEnterClickListener() {
-        findNavController().navigate(R.id.action_welcomeFragment_to_chooseFragment)
     }
 
     override fun onDestroyView() {

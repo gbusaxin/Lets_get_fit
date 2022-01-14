@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/welcomeFragment">
+    app:startDestination="@id/webViewFragment">
 
     <fragment
         android:id="@+id/welcomeFragment"
@@ -13,9 +13,6 @@
         <action
             android:id="@+id/action_welcomeFragment_to_chooseFragment"
             app:destination="@id/chooseFragment" />
-        <action
-            android:id="@+id/action_welcomeFragment_to_webViewFragment"
-            app:destination="@id/webViewFragment" />
     </fragment>
     <fragment
         android:id="@+id/chooseFragment"
@@ -26,5 +23,9 @@
         android:id="@+id/webViewFragment"
         android:name="com.example.letsgetfit.ui.WebViewFragment"
         android:label="fragment_web_view"
-        tools:layout="@layout/fragment_web_view" />
+        tools:layout="@layout/fragment_web_view" >
+        <action
+            android:id="@+id/action_webViewFragment_to_welcomeFragment"
+            app:destination="@id/welcomeFragment" />
+    </fragment>
 </navigation>

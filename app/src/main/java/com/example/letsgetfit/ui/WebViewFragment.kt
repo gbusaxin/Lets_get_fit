@@ -1,29 +1,24 @@
 package com.example.letsgetfit.ui
 
 
-import android.annotation.SuppressLint
 import android.content.Intent
-import android.content.res.Resources
-import android.net.Uri
-import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.webkit.WebView
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.letsgetfit.R
-import com.example.letsgetfit.data.network.models.RequestDto
 import com.example.letsgetfit.databinding.FragmentWebViewBinding
 import com.example.letsgetfit.presentation.CustomChromeClient
 import com.example.letsgetfit.presentation.CustomWebClient
 import com.example.letsgetfit.presentation.ViewModelWebView
-
 
 class WebViewFragment : Fragment() {
 
@@ -36,17 +31,13 @@ class WebViewFragment : Fragment() {
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private lateinit var chromeClient: CustomChromeClient
 
-    companion object {
-        const val INPUT_FILE_REQUEST_CODE = 1
-        const val FILECHOOSER_RESULTCODE = 1
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentWebViewBinding.inflate(inflater, container, false)
         val view = binding.root
+        (activity as AppCompatActivity).supportActionBar?.hide()
         return view
     }
 
@@ -58,72 +49,43 @@ class WebViewFragment : Fragment() {
         swipeRefreshLayout = binding.swipeRefreshLayout
         chromeClient = CustomChromeClient(requireActivity())
 
+        webView.webViewClient = CustomWebClient(requireContext(), progressBar)
+        webView.webChromeClient = chromeClient
+
         viewModel = ViewModelProvider(this)[ViewModelWebView::class.java]
+        viewModel.setWebViewSettings(webView.settings)
+        viewModel.callToServer(webView)
 
-        var request: RequestDto? = null
-
-        viewModel.getLocale.observe(viewLifecycleOwner, {
-            request = it
-            Log.d("CHECK_WEB_FRAGMENT", "webviewLocale - > ${it.request}")
+        viewModel.isResponseNegative.observe(viewLifecycleOwner,{
+            if (it == true){
+                findNavController().navigate(R.id.action_webViewFragment_to_welcomeFragment)
+                Log.d("CHECK_CHECK",it.toString())
+            }
         })
 
-        val response = request?.let { viewModel.callToServer(it) }
+        swipeRefreshLayout.setOnRefreshListener {
+            swipeRefreshLayout.isRefreshing = true
+            Handler(Looper.getMainLooper()).postDelayed({
+                swipeRefreshLayout.isRefreshing = false
+                webView.loadUrl(webView.url.toString())
+            }, 900)
+        }
 
-        response?.observe(viewLifecycleOwner, {
-            viewModel.setWebViewSettings(webView.settings)
-            webView.webChromeClient = chromeClient
-            webView.webViewClient = CustomWebClient(requireContext(), progressBar)
+        webView.setOnKeyListener(View.OnKeyListener { _, keyCode, event ->
+            if (keyCode == KeyEvent.KEYCODE_BACK &&
+                event.action == MotionEvent.ACTION_UP &&
+                webView.canGoBack()
+            ) {
+                webView.goBack()
+                return@OnKeyListener true
+            }
+            false
         })
     }
 
-    @SuppressLint("ObsoleteSdkInt")
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if (requestCode != INPUT_FILE_REQUEST_CODE || chromeClient.mFilePathCallback == null) {
-                super.onActivityResult(requestCode, resultCode, data)
-                return
-            }
-            var results: Array<Uri>? = null
-            // Check that the response is a good one
-            if (resultCode == AppCompatActivity.RESULT_OK) {
-                if (R.attr.data == null) {
-                    // If there is not data, then we may have taken a photo
-                    if (chromeClient.mCameraPhotoPath != null) {
-                        results = arrayOf(Uri.parse(chromeClient.mCameraPhotoPath))
-                    }
-                } else {
-                    val dataString: String? = data?.getDataString()
-                    if (dataString != null) {
-                        results = arrayOf(Uri.parse(dataString))
-                    }
-                }
-            }
-            chromeClient.mFilePathCallback?.onReceiveValue(results)
-        } else if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
-            if (requestCode != FILECHOOSER_RESULTCODE || chromeClient.mUploadMessage == null) {
-                super.onActivityResult(requestCode, resultCode, data)
-                return
-            }
-            if (requestCode == FILECHOOSER_RESULTCODE) {
-                if (null == chromeClient.mUploadMessage) {
-                    return
-                }
-                var result: Uri? = null
-                try {
-                    if (resultCode != AppCompatActivity.RESULT_OK) {
-                        result = null
-                    } else {
-                        // retrieve from the private variable if the intent is null
-                        result = data?.let { chromeClient.mCapturedImageURI ?: it.data }
-                    }
-                } catch (e: Exception) {
-                    Log.e("CHECK_WEB_FRAGMENT", "onActivityResult", e)
-                }
-                chromeClient.mUploadMessage.onReceiveValue(result)
-            }
-        }
-        return
+        chromeClient.onActivityResult(requestCode, resultCode, data)
     }
 
     override fun onDestroyView() {

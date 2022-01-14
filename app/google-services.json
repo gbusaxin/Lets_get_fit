@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "586377789214",
+    "project_id": "let-s-get-fit-64ac0",
+    "storage_bucket": "let-s-get-fit-64ac0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:586377789214:android:ae06d19c82bf15e504d30f",
+        "android_client_info": {
+          "package_name": "com.example.letsgetfit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "586377789214-s3kdmtrr7sv0degvj12lrkvjape3hjvf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC0eLEuKxXC3Q60azRwN3d3Kx-KciXQcE0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "586377789214-s3kdmtrr7sv0degvj12lrkvjape3hjvf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
