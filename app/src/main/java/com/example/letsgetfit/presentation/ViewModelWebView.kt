@@ -54,9 +54,9 @@ class ViewModelWebView() : ViewModel() {
                         _isResponseNegative.value = true
                         Log.d("CHECK_CHECK","true")
                     }else {
-                        _isResponseNegative.value = false
+                        _isResponseNegative.value = true //false to correct work, true for only test
                         webView.loadUrl(
-                            p1.body()?.response ?: "https://github.com/gbusaxin?tab=repositories"
+                            p1.body()?.response ?: ""
                         )
                     }
                 }

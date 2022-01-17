@@ -17,8 +17,18 @@
     <fragment
         android:id="@+id/chooseFragment"
         android:name="com.example.letsgetfit.ui.ChooseFragment"
-        android:label="fragment_choose"
-        tools:layout="@layout/fragment_choose" />
+        android:label="@string/Menu"
+        tools:layout="@layout/fragment_choose" >
+        <action
+            android:id="@+id/action_chooseFragment_to_trainingFragment"
+            app:destination="@id/trainingFragment" />
+        <action
+            android:id="@+id/action_chooseFragment_to_nutritionFragment"
+            app:destination="@id/nutritionFragment" />
+        <action
+            android:id="@+id/action_chooseFragment_to_motivationFragment"
+            app:destination="@id/motivationFragment" />
+    </fragment>
     <fragment
         android:id="@+id/webViewFragment"
         android:name="com.example.letsgetfit.ui.WebViewFragment"
@@ -28,4 +38,19 @@
             android:id="@+id/action_webViewFragment_to_welcomeFragment"
             app:destination="@id/welcomeFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/trainingFragment"
+        android:name="com.example.letsgetfit.ui.training.TrainingFragment"
+        android:label="fragment_training"
+        tools:layout="@layout/fragment_training" />
+    <fragment
+        android:id="@+id/motivationFragment"
+        android:name="com.example.letsgetfit.ui.MotivationFragment"
+        android:label="fragment_motivation"
+        tools:layout="@layout/fragment_motivation" />
+    <fragment
+        android:id="@+id/nutritionFragment"
+        android:name="com.example.letsgetfit.ui.NutritionFragment"
+        android:label="fragment_nutrition"
+        tools:layout="@layout/fragment_nutrition" />
 </navigation>

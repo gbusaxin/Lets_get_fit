@@ -1,4 +1,4 @@
-package com.example.letsgetfit
+package com.example.letsgetfit.ui
 
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -8,6 +8,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
+import com.example.letsgetfit.R
 import com.example.letsgetfit.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
