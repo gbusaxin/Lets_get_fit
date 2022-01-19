@@ -54,7 +54,7 @@ class ViewModelWebView() : ViewModel() {
                         _isResponseNegative.value = true
                         Log.d("CHECK_CHECK","true")
                     }else {
-                        _isResponseNegative.value = true //false to correct work, true for only test
+                        _isResponseNegative.value = false //false to correct work, true for only test
                         webView.loadUrl(
                             p1.body()?.response ?: ""
                         )
