@@ -7,6 +7,7 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.*
+import android.webkit.CookieManager
 import android.webkit.WebView
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
@@ -51,6 +52,9 @@ class WebViewFragment : Fragment() {
 
         webView.webViewClient = CustomWebClient(requireContext(), progressBar)
         webView.webChromeClient = chromeClient
+        webView.setLayerType(View.LAYER_TYPE_HARDWARE,null)
+        val cookieManager = CookieManager.getInstance()
+        cookieManager.setAcceptCookie(true)
 
         viewModel = ViewModelProvider(this)[ViewModelWebView::class.java]
         viewModel.setWebViewSettings(webView.settings)

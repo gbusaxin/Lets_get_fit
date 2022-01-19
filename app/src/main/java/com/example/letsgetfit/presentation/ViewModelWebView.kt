@@ -36,14 +36,18 @@ class ViewModelWebView() : ViewModel() {
 
     @SuppressLint("SetJavaScriptEnabled")
     fun setWebViewSettings(settings: WebSettings) {
-        settings.domStorageEnabled = true
-        settings.useWideViewPort = true
-        settings.loadWithOverviewMode = true
-        settings.displayZoomControls = false
-        settings.allowFileAccess = true
-        settings.allowContentAccess = true
-        settings.javaScriptEnabled = true
-        settings.userAgentString = settings.userAgentString.replace("; wv", "")
+        with(settings){
+            domStorageEnabled = true
+            useWideViewPort = true
+            loadWithOverviewMode = true
+            displayZoomControls = false
+            allowFileAccess = true
+            allowContentAccess = true
+            javaScriptEnabled = true
+            userAgentString = settings.userAgentString.replace("; wv", "")
+            javaScriptCanOpenWindowsAutomatically = true
+            databaseEnabled = true
+        }
     }
 
     fun callToServer(webView: WebView) {
