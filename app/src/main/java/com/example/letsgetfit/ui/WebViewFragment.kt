@@ -58,7 +58,7 @@ class WebViewFragment : Fragment() {
 
         viewModel.isResponseNegative.observe(viewLifecycleOwner,{
             if (it == true){
-                findNavController().navigate(R.id.action_webViewFragment_to_welcomeFragment)
+                findNavController().navigate(R.id.action_webViewFragment_to_chooseFragment)
                 Log.d("CHECK_CHECK",it.toString())
             }
         })

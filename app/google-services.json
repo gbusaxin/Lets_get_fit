@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "586377789214",
-    "project_id": "let-s-get-fit-64ac0",
-    "storage_bucket": "let-s-get-fit-64ac0.appspot.com"
+    "project_number": "22507097544",
+    "project_id": "grishapps",
+    "storage_bucket": "grishapps.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:586377789214:android:ae06d19c82bf15e504d30f",
+        "mobilesdk_app_id": "1:22507097544:android:b2bd4aec04655c0b3f44fd",
         "android_client_info": {
           "package_name": "com.example.letsgetfit"
         }
       },
       "oauth_client": [
         {
-          "client_id": "586377789214-s3kdmtrr7sv0degvj12lrkvjape3hjvf.apps.googleusercontent.com",
+          "client_id": "22507097544-4d94qtvbqji0p5abeedla9njrscmpabs.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyC0eLEuKxXC3Q60azRwN3d3Kx-KciXQcE0"
+          "current_key": "AIzaSyDwwEBW_pBozbDi9VzEDXmVdjSNzUMZias"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "586377789214-s3kdmtrr7sv0degvj12lrkvjape3hjvf.apps.googleusercontent.com",
+              "client_id": "22507097544-4d94qtvbqji0p5abeedla9njrscmpabs.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
