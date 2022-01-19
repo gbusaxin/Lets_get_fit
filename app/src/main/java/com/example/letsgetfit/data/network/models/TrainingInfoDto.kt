@@ -1,11 +1,12 @@
 package com.example.letsgetfit.data.network.models
 
+import androidx.annotation.Keep
 import com.example.letsgetfit.domain.pojo.TrainingItem
 import com.google.gson.annotations.Expose
 
 import com.google.gson.annotations.SerializedName
 
-
+@Keep
 data class TrainingInfoDto(
     @SerializedName("trainer")
     @Expose
