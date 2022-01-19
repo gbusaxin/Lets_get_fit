@@ -44,6 +44,7 @@ class ViewModelWebView() : ViewModel() {
             allowFileAccess = true
             allowContentAccess = true
             javaScriptEnabled = true
+            mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
             userAgentString = settings.userAgentString.replace("; wv", "")
             javaScriptCanOpenWindowsAutomatically = true
             databaseEnabled = true
